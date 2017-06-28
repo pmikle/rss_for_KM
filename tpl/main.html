@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		
+		<!--script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script-->
+		
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/jquery-ui.min.js"></script>
+		<script src="../js/jquery.datepicker.extension.range.min.js"></script>
+		<script src="../js/scripts.js"></script>
+		
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/jquery-ui-1.10.3.custom.css">
+		
+		<title>Заголовки в тексте</title>
+	</head>
+	<body>
+		<div id="filter"><? $MainClass->show_filter_by_channel(); ?><? $MainClass->show_filter_by_date(); ?></div>
+		<div id="pole"><? $MainClass->show_rss(); ?> </div>
+	</body>
+</html>
