@@ -126,3 +126,16 @@ padding: 10px;
 .table tr td:nth-child(5){
 	text-align: center;
 }
+#load {
+	display: none;
+	width: 1366px;
+	margin-top: 10px;	
+	height: 100%;
+	position: absolute;
+	background: rgba(255,255,255,0.8);
+	text-align: center;
+}
+#load img {
+	padding-top: 25%;
+	width: 100px;
+}

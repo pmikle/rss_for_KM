@@ -26,6 +26,7 @@ $(function() {
 		$("#date_range").hide();
 	});
 	$("#dater").click(function(){
+		$("#load").css("display","block");
 		$("#date_range").hide();
 		$.get(
 			"/ajax.php",
@@ -38,10 +39,13 @@ $(function() {
 		);
 
 		function onAjaxSuccess(data) {
+			
 			$.when(
 				$("#pole").html(data)
 			).then(function(){ 
 				update_obr () 
+			}).then(function() {
+				$("#load").css("display","none");
 			});
 		}
 	});
