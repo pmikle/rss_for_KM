@@ -47,8 +47,8 @@
 					
 					if ( !$this->GSV("select nid from news where chid = {$row[chid]} and \"pubDate\" = '{$val->pubDate}' and title = '{$val->title}'") ) {
 						$sql = "INSERT INTO news 
-						(chid, title, link, description, \"pubDate\")
-						VALUES ({$row[chid]}, '{$val->title}', '{$val->link}', '{$val->description}', '{$val->pubDate}')";
+						(chid, title, link, description, \"pubDate\", likes)
+						VALUES ({$row[chid]}, '{$val->title}', '{$val->link}', '{$val->description}', '{$val->pubDate}', 0)";
 						$this->query($sql);
 					}
 				}
@@ -56,49 +56,63 @@
 		}
 		
 		public function show_rss ($str="") {
-			$s = $this->query("select * from news as n join rss_channels as c using(chid){$str}");
-			?><table class="table1 tablesorter">
-				<thead>
-					<tr>
-						<th>№</th>
-						<th>Канал</th>
-						<th>Новость</th>
-						<th>Дата</th>
-					</tr>
-				</thead>
-				<tbody>
+			$s = $this->query("
+				select 
+					row_number() over() as rn
+					, * from (
+						select 
+							CASE
+								WHEN likes>=10 THEN '<img src=\'css/images/cub.png\' class=\'likes\'>'
+								ELSE '<span name=\"lp\" nid=\"'|| nid ||'\">' || likes || '<img src=\"css/images/like.png\" class=\"likes cll\" nid=\"' || nid || '\"></span>'
+							END as lk
+							, *
+						from news as n join rss_channels as c using(chid){$str} order by likes desc, \"pubDate\"
+					) as t");
+			?><table class="table">
+				<tr>
+					<td>№</td>
+					<td>Канал</td>
+					<td>Новость</td>
+					<td>Дата</td>
+					<td>Рейтинг</td>
+				</tr>
 			<?
 			while ($r = pg_fetch_assoc($s)) {
 				?>
-					<tr>
-						<td> </td>
-						<td><?=$r['name']?></td>
-						<td><?=$r['title']?></td>
-						<td><?=$r['pubDate']?></td>
-					<tr>
+				<tr>
+					<td><?=$r['rn']?>.</td>
+					<td><?=$r['name']?></td>
+					<td><?=$r['title']?></td>
+					<td><?=$r['pubDate']?></td>
+					<td><?=$r['lk']?></td>
+				<tr>
 				<?
 
 			}
-			?>	</tbody>
-			</table><?
+			?></table><?
 		}
 		
 		public function show_filter_by_channel() {
 			$s = $this->query("select chid, name from rss_channels");
-			?><select name="channel">
-				<option value=""></option><?
-			while ($r = pg_fetch_assoc($s)) {
-				?><option value="<?=$r['chid']?>"><?=$r['name']?></option><?
-			}
-			?></select><?
+			?>
+			<div id="channels_filter"> Источник новостей:
+				<select name="channel">
+					<option value="">все</option><?
+				while ($r = pg_fetch_assoc($s)) {
+					?><option value="<?=$r['chid']?>"><?=$r['name']?></option><?
+				}
+				?></select>
+			</div><?
 		}
 		
 		public function show_filter_by_date() {
 			?>
-			<div id="date_range"></div>
-			<input name="startDate">
-			<input name="endDate">
-			<span id="dater">выбрать</span><?
+			<div id="dates_filter">
+				<div id="date_range"></div>
+				<input name="startDate">
+				<input name="endDate">
+				<span id="dater">выбрать</span>
+			</div><?
 		}
 		
 		public function security_query($str) {
@@ -112,7 +126,7 @@
 			
 			$this->conn = $this->dbconnect();
 			
-			//$this->update_rss();
+			$this->update_rss();
 			
 			
 

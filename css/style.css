@@ -12,3 +12,117 @@
   border-right: 2px dotted #D4E7F6;
   padding-right: 1px;
 }
+body {
+  width: 1366px;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+#filter {
+-webkit-box-shadow: 0px 7px 6px 0px rgba(94, 87, 50, 0.75);
+-moz-box-shadow:    0px 7px 6px 0px rgba(94, 87, 50, 0.75);
+box-shadow:         0px 7px 6px 0px rgba(94, 87, 50, 0.75);
+	border-radius: 0px 0px 10px 10px;
+  padding: 10px;
+  text-align: center;
+}
+#date_range {
+  display: none;
+  position: absolute;
+  margin-top: 25px;
+  margin-left: -30px;
+  background: white;
+}
+#channels_filter {
+  float: left;
+}
+#dates_filter {
+  float: right;
+}
+#pole {
+	margin-top: 10px;
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(94, 87, 50, 0.75);
+-moz-box-shadow:    0px 2px 1px 0px rgba(94, 87, 50, 0.75);
+box-shadow:         0px 2px 1px 0px rgba(94, 87, 50, 0.75);
+border-radius: 0px 0px 0px 0px;
+padding: 10px;
+}
+.clear {
+  clear: both;
+}
+#close_date {
+  float:right;
+  margin-right: 10px;
+  cursor: pointer;
+  background: black;
+  width: 14px;
+  height: 14px;
+  border-radius: 5px;
+  color: white;
+  font-size: 8pt;
+}
+#close_date:hover {
+  background: grey;
+}
+#dater {
+  cursor: pointer;
+	-webkit-box-shadow: 1px 1px 3px 0px rgba(50, 0, 0, 0.75);
+	-moz-box-shadow:    1px 1px 3px 0px rgba(50, 0, 0, 0.75);
+	box-shadow:         1px 1px 3px 0px rgba(50, 0, 0, 0.75);
+  border-radius: 5px;
+  padding: 0px 5px 2px 5px;
+
+}
+#dater:hover {
+	-webkit-box-shadow: 1px 1px 7px 0px rgba(50, 0, 0, 0.75);
+	-moz-box-shadow:    1px 1px 7px 0px rgba(50, 0, 0, 0.75);
+	box-shadow:         1px 1px 7px 0px rgba(50, 0, 0, 0.75);
+}
+.likes {
+	width: 20px;
+
+}
+.cll:hover {
+	cursor: pointer;
+	-webkit-box-shadow: 1px 1px 7px 0px rgba(50, 0, 0, 0.75);
+	-moz-box-shadow:    1px 1px 7px 0px rgba(50, 0, 0, 0.75);
+	box-shadow:         1px 1px 7px 0px rgba(50, 0, 0, 0.75);
+	border-radius: 5px;
+}
+.table{
+
+	border-spacing: 0px 0px;
+	width: 100%;
+}
+.table td{
+	border-bottom: 1px solid grey;
+}
+.table tr:hover{
+	border-bottom: 1px solid grey;
+	background: #e6f3ff;
+}
+.table tr:first-child{
+	background:  #005cb3;
+}
+.table tr:first-child td:nth-child(3){
+	border-left: none;
+	border-right: none;
+}
+.table tr:first-child td{
+	color:  white;
+	text-align: center;
+}
+.table tr td:nth-child(2){
+	text-align: center;
+}
+.table tr td:nth-child(3){
+	text-align: center;
+	border-left: 1px solid grey;
+	border-right: 1px solid grey;
+}
+.table tr td:nth-child(4){
+	text-align: center;
+}
+.table tr td:nth-child(5){
+	text-align: center;
+}

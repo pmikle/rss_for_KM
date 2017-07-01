@@ -15,37 +15,90 @@ $(function() {
 	var extensionRange = $('#date_range').datepicker('widget').data('datepickerExtensionRange');
 	if(extensionRange.startDateText) $('[name=startDate]').val(extensionRange.startDateText);
 	if(extensionRange.endDateText) $('[name=endDate]').val(extensionRange.endDateText);
- 	
-	$("[name=channel]").bind('change', function(){
-		$.get(
-			"/ajax.php",
-			{
-				name: $("[name=channel]").attr('name'),
-				val: $("[name=channel]").val()
-			},
-			onAjaxSuccess
-		);
-
-		function onAjaxSuccess(data) {
-			$("#pole").html(data);
-		}
-	});
 	
+	$("[name=startDate]").click(function(){
+		$("#date_range").show();
+	});
+	$("[name=endDate]").click(function(){
+		$("#date_range").show();
+	});	
+	$("#close_date").click(function(){
+		$("#date_range").hide();
+	});
 	$("#dater").click(function(){
-
+		$("#date_range").hide();
 		$.get(
 			"/ajax.php",
 			{
-				name: 'date',
 				val_start: $("[name=startDate]").val(),
 				val_end: $("[name=endDate]").val(),
+				rss_channel: $("[name=channel]").val()
 			},
 			onAjaxSuccess
 		);
 
 		function onAjaxSuccess(data) {
-			$("#pole").html(data);
+			$.when(
+				$("#pole").html(data)
+			).then(function(){ 
+				update_obr () 
+			});
 		}
 	});
-
+	function update_obr () {
+		
+		$("[name=lp]").click(function(){
+			console.log("123123123");
+			nid = $(this).attr("nid");
+			$.get(
+				"/ajax.php",
+				{
+					nid: nid
+				},
+				onAjaxSuccess2
+			);
+			function onAjaxSuccess2(data) {
+				
+				data = jQuery.parseJSON(data);
+				nid = data['nid'];
+				likes = data['likes'];
+				if (likes < 10) { 
+					$("[name=lp][nid="+nid+"]").html(likes+'<img src=\"css/images/like.png\" class=\"likes cll\" nid=\"'+nid+'\">');
+				} else {
+					$.get(
+						"/ajax.php",
+						{
+							update: true
+						},
+						onAjaxSuccess3
+					);			
+					function onAjaxSuccess3(data) {
+						$.when(
+							$("#dater").click()
+						).then(function(){ 
+							update_obr () 
+						});
+						
+					}
+				}
+			}
+		});
+	}
+	update_obr ();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
