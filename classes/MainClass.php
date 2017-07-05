@@ -32,6 +32,20 @@
 			
 		}
 		
+		public function print_r_pre ($array, $it=0) {
+			$it++;
+			foreach ($array as $key => $value) {
+				for ($i=0; $i<$it; $i++) { echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"; }
+				if (gettype($array[$key])<>"array") {
+					echo "[$key] -> $value<br>";
+				}
+				else {
+					echo "[$key] -> <br>";
+					$this->print_r_pre ($array[$key], $it);
+				}
+			}
+		}
+		
 		private function update_rss() {
 			
 			$r = $this->query("select chid, name, url, link from rss_channels");
@@ -55,6 +69,37 @@
 			}
 		}
 		
+		private function regular_update_rss() {
+			
+			$r = $this->query("select chid, name, url, link from rss_channels");
+			$i = 0;
+			while ($row = pg_fetch_assoc($r)) {
+
+				$url = $row['url'];
+				$chid = $row['chid'];
+				
+				$re = '/<item>.*?\s*\n*<title>(.*?)<\/title>.*?\s*\n*<link>(.*?)<\/link>.*?\s*\n*<description>(.*?)<\/description>.*?\s*\n*<pubDate>(.*?)<\/pubDate>/';
+				$str = file_get_contents($url);
+				preg_match_all($re, $str, $matches, PREG_SET_ORDER, 0);
+				
+				$title = $matches[$i][1];
+				$link = $matches[$i][2];
+				$description = $matches[$i][3];
+				$pubDate = $matches[$i][4];
+
+				foreach ($matches as $key => $val) {
+					
+					if ( !$this->GSV("select nid from news where chid = {$row[chid]} and \"pubDate\" = '{$pubDate}' and title = '{$title}'") ) {
+						$sql = "INSERT INTO news 
+						(chid, title, link, description, \"pubDate\", likes)
+						VALUES ({$row[chid]}, '{$title}', '{$link}', '{$description}', '{$pubDate}', 0)";
+						$this->query($sql);
+					}
+				}
+				
+				$i++;
+			}
+		}
 		public function show_rss ($str="") {
 			$s = $this->query("
 				select 
@@ -126,9 +171,9 @@
 			
 			$this->conn = $this->dbconnect();
 			
-			$this->update_rss();
+			//$this->update_rss();
 			
-			
+			$this->regular_update_rss();
 
 		}
 	
